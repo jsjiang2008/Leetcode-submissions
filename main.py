@@ -28,16 +28,26 @@ class Solution:
         if root is None:
             return 0
         return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+    
     # 872. Leaf Similar Trees
     def leafSimilar(self, root1: TreeNode | None, root2: TreeNode | None) -> bool:
         a = self.findLeaves(root1)
         b = self.findLeaves(root2)
         return True if a == b else False
-
-
     def findLeaves(self, root: TreeNode | None) -> str:
         if root is None:
             return ""
         if root.left is None and root.right is None:
             return " " + str(root.val)
         return self.findLeaves(root.left) + self.findLeaves(root.right)
+
+    # 1448. Count Good Nodes in Binary Tree
+    def goodNodes(self, root: TreeNode) -> int:
+        def dfs(node, maxSeen):
+            if node is None:
+                return 0
+            ans = 1 if node.val >= maxSeen else 0
+            maxSeen = max(maxSeen, node.val)
+            return ans + dfs(node.left, maxSeen) + dfs(node.right, maxSeen)
+            
+        return dfs(root, root.val)
