@@ -1,3 +1,4 @@
+import numpy as np
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
@@ -28,6 +29,26 @@ class Solution:
         if root is None:
             return 0
         return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
+
+    # 437. Path Sum III
+    def pathSum(self, root: TreeNode | None, targetSum: int) -> int:
+        prefixSum = {0: 1}
+        def dfs(node, currentSum):
+            if node is None:
+                return 0
+            currentSum += node.val
+
+            ans = prefixSum.get(currentSum - targetSum, 0)
+
+            prefixSum[currentSum] = prefixSum.get(currentSum, 0) + 1
+
+            ans += dfs(node.left, currentSum)
+            ans += dfs(node.right, currentSum)
+
+            prefixSum[currentSum]  -= 1
+
+            return ans
+        return dfs(root, 0)
     
     # 872. Leaf Similar Trees
     def leafSimilar(self, root1: TreeNode | None, root2: TreeNode | None) -> bool:
@@ -51,3 +72,5 @@ class Solution:
             return ans + dfs(node.left, maxSeen) + dfs(node.right, maxSeen)
             
         return dfs(root, root.val)
+
+    
